@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML 2023 C</title>
+    <style>
+      :root {
+        --page-bg: #f1f3f4;
+        --panel-bg: #ffffff;
+        --border: #dadce0;
+        --soft-border: #eceef1;
+        --text: #202124;
+        --muted: #5f6368;
+        --nav: #5f6368;
+        --blue: #1a73e8;
+        --blue-hero-start: #1ea7f5;
+        --blue-hero-end: #2a6fe4;
+        --shadow: 0 1px 0 rgba(60, 64, 67, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--page-bg);
+        color: var(--text);
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+      }
+
+      .page {
+        width: 100%;
+        min-height: 100vh;
+        background: #f3f3f3;
+      }
+
+      .topbar {
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255,255,255,0.87);
+        border-bottom: 1px solid #dfe1e5;
+        padding: 0 22px 0 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .menu-btn,
+      .tool-btn {
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .menu-icon {
+        width: 18px;
+        height: 13px;
+        position: relative;
+      }
+
+      .menu-icon span {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #5f6368;
+        border-radius: 2px;
+      }
+
+      .menu-icon span:nth-child(1) { top: 0; }
+      .menu-icon span:nth-child(2) { top: 5.5px; }
+      .menu-icon span:nth-child(3) { bottom: 0; }
+
+      .brand-text {
+        font-size: 1.05rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: #3c4043;
+      }
+
+      .main-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .main-nav a {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        height: 58px;
+        padding: 0 5px;
+        color: var(--nav);
+        text-decoration: none;
+        font-size: 0.82rem;
+        font-weight: 500;
+      }
+
+      .main-nav a.active {
+        color: var(--blue);
+      }
+
+      .main-nav a.active::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        background: var(--blue);
+        border-radius: 3px 3px 0 0;
+      }
+
+      .header-tools {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .tool-btn {
+        width: 20px;
+        height: 20px;
+        color: #5f6368;
+      }
+
+      .tool-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f4d29d, #d88d5f 72%);
+        border: 2px solid rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .content {
+        width: min(1180px, calc(100vw - 110px));
+        margin: 28px auto 0;
+      }
+
+      .hero {
+        position: relative;
+        height: 175px;
+        background: linear-gradient(90deg, var(--blue-hero-start), var(--blue-hero-end));
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .hero .customize {
+        position: absolute;
+        right: 20px;
+        top: 18px;
+        border: 1px solid rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.9);
+        color: #3c6bd7;
+        border-radius: 16px;
+        padding: 8px 18px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      }
+
+      .hero-title {
+        position: absolute;
+        left: 26px;
+        bottom: 18px;
+        margin: 0;
+        color: #fff;
+        font-size: clamp(1.9rem, 2.4vw, 2.9rem);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .hero-badge {
+        position: absolute;
+        right: 18px;
+        bottom: 22px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        color: rgba(255,255,255,0.9);
+        border: 1px solid rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.08);
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .hero-graphic {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .hero-graphic svg {
+        position: absolute;
+        right: 14px;
+        top: -18px;
+        width: 520px;
+        height: 220px;
+        opacity: 0.92;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 18px;
+        margin-top: 18px;
+        align-items: start;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .side-card {
+        background: var(--panel-bg);
+        border: 1px solid var(--soft-border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .meet-card {
+        padding: 12px 10px 10px;
+      }
+
+      .card-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2px 4px 10px;
+      }
+
+      .card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .google-icon {
+        width: 17px;
+        height: 17px;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #34a853 0 25%, #4285f4 25% 51%, #ea4335 51% 75%, #fbbc05 75% 100%);
+        position: relative;
+      }
+
+      .google-icon::before {
+        content: "";
+        position: absolute;
+        right: 2px;
+        top: 2px;
+        width: 8px;
+        height: 8px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 2px;
+      }
+
+      .card-menu {
+        color: #5f6368;
+        font-size: 1.3rem;
+        line-height: 1;
+      }
+
+      .link-row {
+        padding: 0 8px;
+      }
+
+      .link-box,
+      .class-code-box {
+        width: 100%;
+        height: 34px;
+        border: 1px solid #dfe1e5;
+        border-radius: 8px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #3c4043;
+        font-size: 0.92rem;
+      }
+
+      .link-box {
+        font-weight: 500;
+      }
+
+      .class-code-box {
+        margin-top: 10px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .copy {
+        width: 16px;
+        height: 16px;
+        color: #5f6368;
+      }
+
+      .upcoming-card {
+        padding: 12px 10px 10px;
+      }
+
+      .upcoming-header {
+        padding: 2px 4px 8px;
+      }
+
+      .upcoming-header .title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #3c4043;
+      }
+
+      .upcoming-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 8px 4px;
+      }
+
+      .date-block {
+        display: flex;
+        align-items: center;
+      }
+
+      .date-label {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        font-size: 0.78rem;
+        color: #3c4043;
+      }
+
+      .date-label strong {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #3c4043;
+      }
+
+      .schedule-link {
+        display: inline-block;
+        margin-top: 4px;
+        color: var(--blue);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .feed {
+        min-width: 0;
+      }
+
+      .composer {
+        display: grid;
+        grid-template-columns: 46px minmax(0, 1fr) 30px;
+        align-items: center;
+        gap: 12px;
+        background: var(--panel-bg);
+        border: 1px solid var(--soft-border);
+        border-radius: 12px;
+        padding: 10px 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .profile-mini {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e2b98a, #b76d54);
+        position: relative;
+      }
+
+      .profile-mini::before {
+        content: "";
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        left: 13px;
+        top: 9px;
+        background: rgba(255,255,255,0.75);
+        border-radius: 50%;
+      }
+
+      .profile-mini::after {
+        content: "";
+        position: absolute;
+        width: 22px;
+        height: 16px;
+        left: 8px;
+        bottom: 4px;
+        background: rgba(255,255,255,0.7);
+        border-radius: 18px 18px 8px 8px;
+      }
+
+      .composer-input {
+        height: 38px;
+        display: flex;
+        align-items: center;
+        color: #5f6368;
+        padding-left: 8px;
+        font-size: 0.95rem;
+        border-radius: 8px;
+      }
+
+      .composer-action {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #5f6368;
+      }
+
+      .post-list {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .post {
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr) 18px;
+        gap: 10px;
+        align-items: center;
+        background: var(--panel-bg);
+        border: 1px solid var(--soft-border);
+        border-radius: 12px;
+        padding: 10px 10px 10px 8px;
+        box-shadow: var(--shadow);
+      }
+
+      .post-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #4d8ef5, #2d74eb);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .post-main {
+        min-width: 0;
+      }
+
+      .post-title {
+        font-size: 0.95rem;
+        line-height: 1.45;
+        color: #1f1f1f;
+        overflow-wrap: anywhere;
+      }
+
+      .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 4px;
+        color: #5f6368;
+        font-size: 0.75rem;
+      }
+
+      .post-meta .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #9aa0a6;
+      }
+
+      .post .menu {
+        color: #5f6368;
+        font-size: 1.4rem;
+        line-height: 1;
+        text-align: center;
+      }
+
+      @media (max-width: 980px) {
+        .main-nav {
+          position: static;
+          transform: none;
+          gap: 16px;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .topbar {
+          padding: 0 12px;
+        }
+
+        .main-nav {
+          display: none;
+        }
+
+        .content {
+          width: min(100% - 18px, 700px);
+        }
+
+        .hero {
+          height: 150px;
+        }
+
+        .hero .customize {
+          top: 12px;
+          right: 12px;
+          padding: 6px 12px;
+        }
+
+        .hero-title {
+          left: 18px;
+          bottom: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <button class="menu-btn" aria-label="Menu">
+            <span class="menu-icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+          <span class="brand-text">HTML 2023 C</span>
+        </div>
+
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#" class="active">Stream</a>
+          <a href="#">Classwork</a>
+          <a href="#">People</a>
+          <a href="#">Grades</a>
+        </nav>
+
+        <div class="header-tools">
+          <button class="tool-btn" aria-label="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3.2"></circle>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .33 1.83l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.83-.33 1.7 1.7 0 0 0-1 1.56V20a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9.7 18.2a1.7 1.7 0 0 0-1.83.33l-.06.06A2 2 0 1 1 4.98 15.7l.06-.06A1.7 1.7 0 0 0 5.8 13.8a1.7 1.7 0 0 0-1.56-1H4.15a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 5.8 7.8a1.7 1.7 0 0 0-.33-1.83l-.06-.06A2 2 0 0 1 8.24 3.1l.06.06A1.7 1.7 0 0 0 10.13 3.3a1.7 1.7 0 0 0 1-1.56V1.6a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 14.3 3.8a1.7 1.7 0 0 0 1.83-.33l.06-.06A2 2 0 0 1 19.02 8.3l-.06.06A1.7 1.7 0 0 0 18.2 10.2a1.7 1.7 0 0 0 1.56 1H20a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"></path>
+            </svg>
+          </button>
+
+          <button class="tool-btn" aria-label="Apps">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <circle cx="5" cy="5" r="1.5"></circle>
+              <circle cx="12" cy="5" r="1.5"></circle>
+              <circle cx="19" cy="5" r="1.5"></circle>
+              <circle cx="5" cy="12" r="1.5"></circle>
+              <circle cx="12" cy="12" r="1.5"></circle>
+              <circle cx="19" cy="12" r="1.5"></circle>
+              <circle cx="5" cy="19" r="1.5"></circle>
+              <circle cx="12" cy="19" r="1.5"></circle>
+              <circle cx="19" cy="19" r="1.5"></circle>
+            </svg>
+          </button>
+
+          <div class="avatar" aria-label="User profile">A</div>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="hero" aria-label="Course banner">
+          <div class="hero-graphic" aria-hidden="true">
+            <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#0e68d4">
+                <path d="M350 30 L410 55 L380 120 L320 105 Z" opacity="0.7"/>
+                <path d="M385 66 L445 96 L420 150 L355 122 Z" opacity="0.82"/>
+                <path d="M270 120 L360 80 L398 122 L300 168 Z" opacity="0.72"/>
+              </g>
+              <g fill="#0b3ba8">
+                <path d="M350 30 L415 0 L474 30 L476 78 L410 100 L350 70 Z" opacity="0.92"/>
+                <path d="M330 90 L380 65 L392 110 L343 134 Z" opacity="0.88"/>
+              </g>
+              <g fill="#f4d37c">
+                <path d="M418 95 L426 144 L455 142 L446 95 Z" opacity="0.9"/>
+                <path d="M442 144 C454 145, 464 150, 469 159 C448 165, 429 164, 411 156 L421 141 Z" opacity="0.85"/>
+              </g>
+              <path d="M282 85 C352 40, 332 123, 374 164" stroke="#f4d37c" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.9"/>
+            </svg>
+          </div>
+
+          <button class="customize">Customize</button>
+          <h1 class="hero-title">HTML 2023 C</h1>
+          <div class="hero-badge">i</div>
+        </section>
+
+        <div class="layout">
+          <aside class="sidebar" aria-label="Class sidebar">
+            <div class="side-card meet-card">
+              <div class="card-row">
+                <div class="card-title">
+                  <span class="google-icon" aria-hidden="true"></span>
+                  <span>Meet</span>
+                </div>
+                <div class="card-menu">⋮</div>
+              </div>
+
+              <div class="link-row">
+                <div class="link-box">Generate link</div>
+              </div>
+
+              <div class="link-row" style="margin-top: 12px;">
+                <div class="class-code-box">
+                  <span>ai2pyt3</span>
+                  <svg class="copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                    <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="side-card upcoming-card">
+              <div class="upcoming-header">
+                <div class="title">Upcoming</div>
+              </div>
+
+              <div class="upcoming-list">
+                <div class="date-block">
+                  <div class="date-label">
+                    <strong>Due tomorrow</strong>
+                    <span>11:59 PM · C3-56-PRACTI...</span>
+                  </div>
+                </div>
+
+                <div class="date-block">
+                  <div class="date-label">
+                    <strong>Due Wednesday</strong>
+                    <span>11:59 PM · C3-56-ASSIGN...</span>
+                  </div>
+                </div>
+
+                <div class="date-block" style="margin-top: 4px;">
+                  <a class="schedule-link" href="#">View all</a>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <section class="feed" aria-label="Class announcements">
+            <div class="composer">
+              <div class="profile-mini" aria-label="Your profile"></div>
+              <div class="composer-input">Announce something to your class</div>
+              <div class="composer-action" aria-label="Post announcement">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M7 7h10v10H7z"></path>
+                  <path d="M7 12h10"></path>
+                </svg>
+              </div>
+            </div>
+
+            <div class="post-list">
+              <article class="post">
+                <div class="post-icon">M</div>
+                <div class="post-main">
+                  <div class="post-head">
+                    <div class="post-title">Mengheng Pho posted a new assignment: C3-5A-ASSIGNMENT(FLEXBOX)</div>
+                  </div>
+                  <div class="post-meta">
+                    <span>Jul 8</span>
+                    <span class="dot"></span>
+                    <span>8:30 PM</span>
+                  </div>
+                </div>
+                <div class="menu">⋮</div>
+              </article>
+
+              <article class="post">
+                <div class="post-icon">M</div>
+                <div class="post-main">
+                  <div class="post-head">
+                    <div class="post-title">Mengheng Pho posted a new assignment: C3-5A-PRACTICE(FLEXBOX)</div>
+                  </div>
+                  <div class="post-meta">
+                    <span>Jul 8</span>
+                    <span class="dot"></span>
+                    <span>Edited Jul 8</span>
+                  </div>
+                </div>
+                <div class="menu">⋮</div>
+              </article>
+
+              <article class="post">
+                <div class="post-icon">J</div>
+                <div class="post-main">
+                  <div class="post-head">
+                    <div class="post-title">Jeanne Pysard posted a new assignment: C3-5A-PRACTICE(FLEXBOX)</div>
+                  </div>
+                  <div class="post-meta">
+                    <span>Jun 27</span>
+                    <span class="dot"></span>
+                    <span>Edited Jun 27</span>
+                  </div>
+                </div>
+                <div class="menu">⋮</div>
+              </article>
+
+              <article class="post">
+                <div class="post-icon">J</div>
+                <div class="post-main">
+                  <div class="post-head">
+                    <div class="post-title">Jeanne Pysard posted a new assignment: C3-5A-Flexbox game</div>
+                  </div>
+                  <div class="post-meta">
+                    <span>Jun 22</span>
+                    <span class="dot"></span>
+                    <span>8:00 AM</span>
+                  </div>
+                </div>
+                <div class="menu">⋮</div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
